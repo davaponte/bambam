@@ -116,10 +116,19 @@ def input(events, quit_pos):
 
             # play random sound
             if not sound_muted:
-                if event.type == KEYDOWN and args.deterministic_sounds:
-                    sounds[event.key % len(sounds)].play()
-                else:
-                    sounds[random.randint(0, len(sounds) -1)].play()
+                print("MAKE SOUND")
+                if event.type == KEYDOWN:
+                    print("KEYDOWN")
+                    if args.deterministic_sounds:
+                        sounds[event.key % len(sounds)].play()
+                        print("SOUNDS")
+                    elif args.phonetic_sounds:
+                        print(event.key)
+                        mp3s[event.key - 48 + 1].play()
+                        print("MP3S")
+                    else:
+                        sounds[random.randint(0, len(sounds) -1)].play()
+                        print("NONES")
 
             # show images
             if event.type == pygame.KEYDOWN and (event.unicode.isalpha() or event.unicode.isdigit()):
@@ -184,6 +193,7 @@ parser.add_argument('-u', '--uppercase', action='store_true', help='Whether to s
 parser.add_argument('--sound_blacklist', action='append', default=[], help='List of sound filename patterns to never play.')
 parser.add_argument('--image_blacklist', action='append', default=[], help='List of image filename patterns to never show.')
 parser.add_argument('-d', '--deterministic-sounds', action='store_true', help='Whether to produce same sounds on same key presses.')
+parser.add_argument('-p', '--phonetic-sounds', action='store_true', help='Produce sounds based on key presses.')
 parser.add_argument('-m', '--mute', action='store_true', help='No sound will be played.')
 args = parser.parse_args()
 
@@ -225,7 +235,13 @@ sound_muted = args.mute
 def glob_data(pattern):
     return glob.glob(os.path.join(progInstallBase, 'data', pattern))
 
+def glob_phonetics(pattern):
+    return glob.glob(os.path.join(progInstallBase, 'phonetics', 'spanish', pattern))
+
 sounds = load_items(glob_data('*.wav'), args.sound_blacklist, load_sound)
+
+mp3s = load_items(glob_phonetics('*.wav'), args.sound_blacklist, load_sound)
+
 
 colors = ((  0,   0, 255), (255,   0,   0), (255, 255,   0),
           (255,   0, 128), (  0,   0, 128), (  0, 255,   0),
