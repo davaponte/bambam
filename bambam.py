@@ -3,6 +3,7 @@
 #    2007-2008 Don Brown,
 #    2010 Spike Burch <spikeb@gmail.com>,
 #    2015-2016 Vasya Novikov
+#    2016 David Aponte <david.aponte@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
